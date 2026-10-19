@@ -1,0 +1,18 @@
+* text=auto
+
+*.glsl text eol=lf
+*.vert text eol=lf
+*.frag text eol=lf
+*.comp text eol=lf
+*.vs text eol=lf
+*.fs text eol=lf
+
+*.ktx  binary
+*.ktx2 binary
+*.png  binary
+*.jpg  binary
+*.hdr  binary
+*.exr  binary
+*.fbx  binary
+*.glb  binary
+*.bin  binary

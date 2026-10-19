@@ -1,0 +1,43 @@
+target("glad")
+    set_kind("static")
+    add_files("glad/src/glad.c")
+    add_includedirs(".", {public = true})
+target_end()
+
+target("GLFW")
+    set_kind("headeronly")   -- xmake still lets you attach link info to headeronly targets
+    add_includedirs("GLFW", {public = true})
+    add_linkdirs("GLFW/lib", {public = true})
+    add_links("glfw3", {public = true})
+    add_syslinks("opengl32", "gdi32", "user32", "shell32", {public = true})
+target_end()
+
+target("glm")
+    set_kind("headeronly")
+    add_includedirs("glm", {public = true})
+target_end()
+
+target("assimp")
+    set_kind("headeronly")
+    add_includedirs("assimp", {public = true})
+    add_linkdirs("assimp/lib", {public = true})
+    add_links("assimp", "z", "minizip", {public = true})
+target_end()
+
+target("stb")
+    set_kind("headeronly")
+    add_includedirs("stb", {public = true})
+target_end()
+
+target("ktx")
+    set_kind("headeronly")
+    add_includedirs(".", "ktx", {public = true})
+    add_linkdirs("ktx/lib", {public = true})
+    add_links("ktx", {public = true})
+target_end()
+
+target("imgui")
+    set_kind("static")
+    add_files("imgui/**.cpp")
+    add_includedirs("imgui", "imgui/backends", {public = true})
+target_end()

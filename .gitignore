@@ -1,0 +1,34 @@
+# xmake
+.xmake/
+build/
+vsxmake*/
+vs20*/
+compile_commands.json
+
+# MinGW / compiler
+*.o
+*.obj
+*.a
+*.exe
+*.dll
+*.pdb
+*.gch
+
+# Ignore all assets except shaders
+Assets/*
+# !Assets/shaders/ to be added later
+assets/**
+!assets/**/
+!assets/**/*.glsl
+!assets/**/*.vert
+!assets/**/*.frag
+!assets/**/*.comp
+!assets/**/*.geom
+
+# Project
+.cache/
+Executable/
+ThirdParty/**
+!ThirdParty/xmake.lua
+GLNotes.txt
+ecodenotes.txt

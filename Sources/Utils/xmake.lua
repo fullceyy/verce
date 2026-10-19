@@ -1,0 +1,7 @@
+target("Utils")
+    set_kind("static")
+    add_files("*.cpp")
+    add_includedirs("..", {public = true})
+    add_syslinks("stdc++exp", {public = true})
+    add_deps("glad")
+target_end()
