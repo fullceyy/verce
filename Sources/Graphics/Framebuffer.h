@@ -1,9 +1,9 @@
 #pragma once
 #include "glad/glad.h"
+#include "Utils/Exception.h"
 
-#include <iostream>
-
-
+#include <vector>
+#include <utility>
 /*
     Reflections need an image of the scene from somewhere other than the current camera
     (or of the current frame itself), and an FBO is how you get that image.
@@ -58,17 +58,59 @@ namespace Graphics
 class Framebuffer
 {
 private:
-    GLuint mId;
-public:
-    ~Framebuffer()
+    GLuint mId {};
+    GLsizei mWidth {}, mHeight {};
+    std::vector<GLenum> mColorAttachments;
+    
+    void Release()
     {
+        if(!mColorAttachments.empty())
+            mColorAttachments.clear();
+            // for(auto i = 0uz; i < mColorAttachments.size(); i++)
+                // glClearNamedFramebufferfv(mId, GL_COLOR, i, )
         glDeleteFramebuffers(1, &mId);
+        // mId = 0; -> exchange on move does this
     }
+public:
+    ~Framebuffer() { Release(); }
     
     Framebuffer(int pWidth, int pHeight)
+    : mWidth(static_cast<GLsizei>(pWidth)), mHeight(static_cast<GLsizei>(pHeight))
     {
         glCreateFramebuffers(1, &mId);
     }
+    
+    Framebuffer(const Framebuffer&) = delete;
+    Framebuffer& operator=(const Framebuffer&) = delete;
+    
+    Framebuffer(Framebuffer&& other) noexcept
+    : mId(std::exchange(other.mId, 0)), 
+    mWidth(other.mWidth), 
+    mHeight(other.mHeight) {}
+    
+    Framebuffer& operator=(Framebuffer&& other) noexcept
+    {
+        if(this != &other)
+        {
+            Release();
+            mId = std::exchange(other.mId, 0);
+            mWidth = other.mWidth;
+            mHeight = other.mHeight;
+            mColorAttachments = std::move(other.mColorAttachments);
+            other.mColorAttachments.clear();
+        }
+        return *this;
+    }
+    
+    void Bind() const;
+    void Unbind() const;
+    void Attach(GLenum pAttachmentTarget, GLuint pRenderTextureId, GLint level = 0);
+    void SetDrawBuffers();
+    void Validate() const;
+    
+    [[nodiscard("Framebuffer ID discarded!")]] inline GLuint GetId() const { return mId; }
+    [[nodiscard]] inline GLsizei GetWidth() const { return mWidth; }
+    [[nodiscard]] inline GLsizei GetHeight() const { return mHeight; }
 };
 
 }
